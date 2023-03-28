@@ -1,0 +1,43 @@
+version: 2
+
+sources:
+  - database: analytics-380111
+    name: jaffle_shop
+    tables:
+      - name: stg_orders
+        loaded_at_field: _etl_loaded_at
+        freshness:
+          warn_after: {count: 10, period: hour}
+          error_after: {count: 24, period: hour}
+
+
+
+models:
+
+  - name: stg_customers
+    columns:
+      - name: customer_id
+        description: A unique id for the customer
+        tests:
+          - unique
+          - not_null
+ 
+  - name: stg_orders
+    columns:
+      - name: order_id
+        description: A unique id for each order
+        tests:
+          - unique
+          - not_null
+      - name: status
+        tests:
+          - accepted_values:
+              values: ['placed', 'shipped', 'completed', 'return_pending', 'returned']
+      - name: customer_id
+        tests:
+          - not_null
+          - relationships:
+              to: ref('stg_customers')
+              field: customer_id
+
+
