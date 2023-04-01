@@ -1,0 +1,9 @@
+default:
+  target: dev
+  outputs:
+    dev:
+      type: "bigquery"
+      method: "service-account"
+      project: "analytics-380111"
+      dataset: "first_dbt_dataset"
+      keyfile: "/home/ib-developer/Git/dbt-practice/dbtkey.json"
